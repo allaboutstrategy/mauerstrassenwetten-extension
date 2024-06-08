@@ -1,45 +1,55 @@
 chrome.storage.sync.get('wordReplacements', function(data) {
   const replacements = data.wordReplacements || {};
-  function replaceText() {
+  
+  function replaceText(node) {
     try {
-      var elements = document.querySelectorAll('*:not(script):not(style):not(link)');
-      elements.forEach(element => {
-        element.childNodes.forEach(child => {
-          if (child.nodeType === 3) { // Text node
-            let text = child.nodeValue;
-            for (const [original, replacement] of Object.entries(replacements)) {
-              const regex = new RegExp(`\\b${original}\\b`, 'gi');
-              if (regex.test(text)) {
-                child.nodeValue = text.replace(regex, replacement);
-              }
-            }
+      if (node.nodeType === 3) { // Text node
+        let text = node.nodeValue;
+        for (const [original, replacement] of Object.entries(replacements)) {
+          const regex = new RegExp(`\\b${original}\\b`, 'gi');
+          if (regex.test(text)) {
+            node.nodeValue = text.replace(regex, replacement);
           }
-        });
-      });
+        }
+      } else if (node.nodeType === 1) { // Element node
+        node.childNodes.forEach(child => replaceText(child));
+      }
     } catch (error) {
       console.error("Error in replaceText:", error);
     }
   }
 
-  try {
-    replaceText();
-  } catch (error) {
-    console.error("Error in event listener or replaceText execution:", error);
+  function replaceTextInDocument() {
+    replaceText(document.body);
   }
 
-  document.addEventListener("DOMContentLoaded", replaceText);
+  document.addEventListener("DOMContentLoaded", replaceTextInDocument);
 
-  // Set up MutationObserver to watch for changes to the DOM
+  // Throttle the MutationObserver callback
+  let scheduled = false;
   const observer = new MutationObserver(mutations => {
-    mutations.forEach(mutation => {
-      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-        replaceText();
-      }
-    });
+    if (!scheduled) {
+      scheduled = true;
+      requestAnimationFrame(() => {
+        mutations.forEach(mutation => {
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            mutation.addedNodes.forEach(node => replaceText(node));
+          }
+        });
+        scheduled = false;
+      });
+    }
   });
 
   observer.observe(document.body, {
     childList: true,
     subtree: true
   });
+
+  // Initial replacement
+  try {
+    replaceTextInDocument();
+  } catch (error) {
+    console.error("Error in event listener or replaceText execution:", error);
+  }
 });
