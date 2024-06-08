@@ -8,7 +8,7 @@ chrome.storage.sync.get('wordReplacements', function(data) {
           if (child.nodeType === 3) { // Text node
             let text = child.nodeValue;
             for (const [original, replacement] of Object.entries(replacements)) {
-              const regex = new RegExp(original, 'gi');
+              const regex = new RegExp(`\\b${original}\\b`, 'gi');
               if (regex.test(text)) {
                 child.nodeValue = text.replace(regex, replacement);
               }
