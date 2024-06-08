@@ -1,0 +1,33 @@
+{
+    "manifest_version": 3,
+    "name": "Mauerstrassen-Wetten",
+    "version": "1.0",
+    "description": "Deutscht Finanzbegriffe ein: Ersetzt 'Nasdaq' durch 'NassDachs' auf allen Webseiten und viele mehr",
+    "permissions": [
+      "activeTab",
+      "storage"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "type": "module"
+      }
+    ],
+    "options_page": "options.html",
+    "web_accessible_resources": [
+      {
+        "resources": ["default_words.js"],
+        "matches": ["<all_urls>"]
+      }
+    ],
+    "icons": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "background": {
+      "service_worker": "background.js",
+      "type": "module"
+    }
+  }

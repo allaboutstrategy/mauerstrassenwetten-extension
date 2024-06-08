@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wort-Austauscher Optionen</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; }
+    input { width: 200px; margin: 5px; }
+    button { margin: 5px; }
+    table { width: 100%; border-collapse: collapse; }
+    td { border: 1px solid #ddd; padding: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Wörter zum Ersetzen</h1>
+  <div>
+    <input type="text" id="originalWord" placeholder="Originalwort">
+    <input type="text" id="replacementWord" placeholder="Ersatzwort">
+    <button id="addButton">Hinzufügen</button>
+  </div>
+  <table id="wordTable">
+    <thead>
+      <tr><th>Original</th><th>Ersetzung</th><th>Aktion</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script src="options.js"></script>
+  <script src="default_words.js"></script>
+</body>
+</html>
