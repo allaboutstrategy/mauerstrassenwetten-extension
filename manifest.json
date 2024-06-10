@@ -1,10 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "Mauerstrassen-Wetten",
+    "name": "Mauerstrassen-Wetten Wort-Ersetzer",
     "version": "1.0",
     "description": "Deutscht Finanzbegriffe ein: Ersetzt 'Nasdaq' durch 'NassDachs' auf allen Webseiten und viele mehr",
     "permissions": [
-      "activeTab",
       "storage"
     ],
     "content_scripts": [
